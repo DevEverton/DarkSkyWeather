@@ -67,11 +67,18 @@ class MainTVC: UITableViewController, UISearchBarDelegate {
 
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
+        return forecastData.count
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return forecastData.count
+        return 1
+    }
+    
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        let date = Calendar.current.date(byAdding: .day, value: section, to: Date())
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd/MM/YYYY"
+        return dateFormatter.string(from: date!)
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
