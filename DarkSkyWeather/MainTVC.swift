@@ -27,19 +27,18 @@ class MainTVC: UITableViewController, UISearchBarDelegate {
 //            }
 //        }
         
+        updateWeatherForLocation(location: "Rio de Janeiro")
+        
+        
         
         
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        
         searchBar.resignFirstResponder()
         if let locationString = searchBar.text, !locationString.isEmpty {
-            
-            
-            
+            updateWeatherForLocation(location: locationString)
         }
-        
     }
     
     func updateWeatherForLocation (location: String) {
@@ -61,42 +60,38 @@ class MainTVC: UITableViewController, UISearchBarDelegate {
                         
                     }
                 
-                
-                
-                
             }
             
         }
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-
-    // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
-        return 0
+        return 1
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
-        return 0
+        return forecastData.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! WeatherCell
-        
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
         let weatherObject = forecastData[indexPath.section]
         
         cell.textLabel?.text = weatherObject.summary
-        cell.detailTextLabel?.text = "\(Int(weatherObject.temperature)) °F"
+        cell.detailTextLabel?.text = fahrenheitToCelsius(temperatureF: weatherObject.temperature)
         cell.imageView?.image = UIImage(named: weatherObject.icon)
         
         return cell
         
+    }
+    
+    // Converting from fahrenheit to celsius, Celsius = ((Tf - 32)*5)/9
+    func fahrenheitToCelsius(temperatureF: Double) -> String {
+        var celsius = Double()
+        let symbol = "ºC"
+        celsius = ((temperatureF - 32)*5)/9
+        return String.localizedStringWithFormat("%.f %@", celsius, symbol)
     }
 
 
